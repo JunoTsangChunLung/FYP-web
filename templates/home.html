@@ -1,0 +1,52 @@
+{% extends './base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+  <section class="py-4 text-center container">
+
+    <div class="row py-lg-5">
+    
+        <div class="col-lg-6 col-md-8 mx-auto">
+            
+
+            <h4> The best tool for your Revenue Management. </h4>
+
+
+            <br>
+            
+
+            <p class="lead text-muted">
+
+            Let's start your jorney
+
+            </p>
+
+
+            <br>
+            
+
+            {% if request.user.is_authenticated %}
+
+            <h4 class = "test-center"> Welcome to 3lilhub! {{user}}</h4>
+
+            {% else %}
+
+            <a href="{% url "account:register" %}" class="btn btn-primary my-2"> Register </a>
+            <a href="{% url "account:my-login" %}" class="btn btn-primary my-2"> Login </a>
+
+            {% endif %}
+
+            <br><br>
+            <img src="{% static 'images/logo.png' %}" class="img-fluid mb-4" alt="Logo">
+            <h2 class="text-center">3lilhub</h2>
+            <h2 class="text-center">包剪揼</h2>
+            
+        </div>
+    
+    </div>
+
+
+</section>
+{% endblock %}
