@@ -1,6 +1,6 @@
 import json
 
-with open('./category.txt') as f:
+with open('rm/category.txt') as f:
     data_str = f.read().replace('\n', ',')
 
 # Parse the JSON array
