@@ -1,0 +1,62 @@
+
+{% include "base.html" %}
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+
+
+</style>
+
+<body>
+
+
+   <!-- All products section -->
+   <div class="album py-5 bg-light">
+        
+    <div class="container">
+
+      <div class="pb-3 h3"> Expected Revenue: HKD $ {{total_revenue}} </div>
+
+
+      <hr>
+
+      <br>
+      
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-5">
+        {% for key,value in user_product.items %}
+          <div class="col">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                  <h5 class = "card-title">
+                      Product {{key}}:
+                  </h5>
+                  <h6 class="card-subtitle mb-2 text-muted">
+                      Product Revenue: HKD $ {{value.partial_revenue}}
+                  </h6>
+                  <div class="card-header">
+                    Product Revenue: HKD $ (Price * Demand)
+                  </div>
+                  <ul class="list-group list-group-flush">
+                  {% for r in value.revenue %}
+                    <li class="list-group-item"> ${{ r.0 }} (${{ r.1 }}|{{ r.2 }})</li>
+                  {% endfor %}                  
+                  </ul>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h5> </h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</body>
+
+{% endblock %}

@@ -1,0 +1,59 @@
+    {% extends "base.html" %}
+
+    {% load static %}
+
+    {% load crispy_forms_tags %}
+
+    {% block content %}
+
+    <style>
+        body {
+            background-color: gray;
+        }
+
+    </style>
+
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#id_category").change(function () {
+                var url = $("#product-form").attr("data-subcategories-url");
+                var categoryId = $(this).val();
+                $.ajax({
+                    url: url,
+                    data: {
+                        'category_id': categoryId
+                    },
+                    success: function (data) {
+                        var subcategorySelect = $("#id_subcategory");
+                        subcategorySelect.empty();
+                        subcategorySelect.append($('<option></option>').val('').text('---------'));
+                        $.each(data, function (index, subcategory) {
+                            subcategorySelect.append($('<option></option>').val(subcategory.id).text(subcategory.name));
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+    <br>
+
+    <div class="container bg-white shadow-md p-5 form-layout">
+        <h3>Add Product:</h3>
+
+        <form method="POST" autocomplete="OFF" id="product-form" data-subcategories-url="{% url 'rm:get-subcategories' %}">
+            {% csrf_token %}
+            
+            {{ category|crispy }}
+            
+            {{ form|crispy }}
+            
+            <br><br>
+            <button type="submit" class="btn btn-secondary btn-lg w-100 btn-block p-2">&nbsp; Add </button>
+
+        </form>
+    </div>
+
+    {% endblock %}
