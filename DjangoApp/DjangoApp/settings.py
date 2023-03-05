@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'account',
     'rm',
     'crispy_forms',
-    'django-boostrap4'
 ]
 
 MIDDLEWARE = [
