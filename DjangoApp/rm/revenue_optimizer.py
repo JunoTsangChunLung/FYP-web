@@ -4,8 +4,8 @@ def optimizer(prices, demands, quantity_produced, inventory, min_price, max_pric
     
     num = len(prices)
 
-    for i in range(num):
-        #min_price & max_price
+    for i in range(num - 1, -1, -1):
+        # min_price & max_price
         if prices[i] > max_price:
             del prices[i]
             del demands[i]
