@@ -117,22 +117,22 @@ def create_product(request):
 def add_cat(request):
     category_dict = make_cat()
     #Bulk create category
-    cat = []
-    subcat = []
-    for key in category_dict:
-        category = Category(name=key)
-        cat.append(category)
-        category.save() # save the category object before creating subcategories
-        for sub_key in category_dict[key]:
-            if sub_key is None or sub_key == "":
-                continue
-            subcat.append(Subcategory(category = category, name = sub_key))
+    # cat = []
+    # subcat = []
+    # for key in category_dict:
+    #     category = Category(name=key)
+    #     cat.append(category)
+    #     category.save() # save the category object before creating subcategories
+    #     for sub_key in category_dict[key]:
+    #         if sub_key is None or sub_key == "":
+    #             continue
+    #         subcat.append(Subcategory(category = category, name = sub_key))
 
-    # Category.objects.all().delete()
-    # Subcategory.objects.all().delete()
+    Category.objects.all().delete()
+    Subcategory.objects.all().delete()
 
-    Category.objects.bulk_create(cat)
-    Subcategory.objects.bulk_create(subcat)
+    # Category.objects.bulk_create(cat)
+    # Subcategory.objects.bulk_create(subcat)
 
     return redirect('home')
 
