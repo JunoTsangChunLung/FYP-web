@@ -5,6 +5,10 @@ from .category import make_cat
 from .models import Category, Subcategory, Product, Prouduct_Price
 from django.http import JsonResponse, HttpResponse
 
+import matplotlib.pyplot as plt
+import io
+import urllib, base64
+
 #testing
 import random
 
@@ -139,16 +143,14 @@ def add_cat(request):
 
     return redirect('home')
 
-
 def revenue_optimization(request):
     user_product = {}
-    products = Product.objects.filter(user = request.user)
+    products = Product.objects.filter(user=request.user)
 
     total_revenue = 0
     for product in products:
-        product_prices = Prouduct_Price.objects.filter(product = product)
+        product_prices = Prouduct_Price.objects.filter(product=product)
         total_revenue += product.total_price
-
 
         price = []
         demand = []
@@ -161,13 +163,34 @@ def revenue_optimization(request):
             partial_revenue += prices.revenue
 
         user_product[product.name] = {
-            "partial_revenue":partial_revenue,
-            "revenue":[(r, p, d) for r, p, d in zip(revenue, price, demand)]
+            "partial_revenue": partial_revenue,
+            "revenue": [(r, p, d) for r, p, d in zip(revenue, price, demand)]
         }
 
+        # Create a bar chart for each product
+        fig, ax = plt.subplots()
+        ax.bar(range(len(price)), revenue)
+        ax.set_xticks(range(len(price)))
+        ax.set_xticklabels(price)
+        ax.set_xlabel('Price')
+        ax.set_ylabel('Revenue')
+        ax.set_title(f'{product.name} Revenue Optimization')
+        
+        # Save the chart to a buffer
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        image_base64 = base64.b64encode(buffer.read()).decode('utf-8').replace('\n', '')
+        buffer.close()
+
+        # Add the image to the dictionary
+        user_product[product.name]['image'] = image_base64
+
+        plt.close()
+
     context = {
-        "total_revenue":total_revenue,
-        "user_product":user_product
+        "total_revenue": total_revenue,
+        "user_product": user_product
     }
-    
+
     return render(request, "rm/optimizer/revenue-optimization.html", context=context)

@@ -42,11 +42,12 @@
                   <div class="card-header">
                     Product Revenue: HKD $ (Price * Demand)
                   </div>
-                  <ul class="list-group list-group-flush">
+                  <img src="data:image/png;base64,{{value.image}}" />
+                  {% comment %} <ul class="list-group list-group-flush">
                   {% for r in value.revenue %}
                     <li class="list-group-item"> ${{ r.0 }} (${{ r.1 }}|{{ r.2 }})</li>
                   {% endfor %}                  
-                  </ul>
+                  </ul> {% endcomment %}
                   <div class="d-flex justify-content-between align-items-center">
                     <h5> </h5>
                   </div>
