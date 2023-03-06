@@ -169,9 +169,9 @@ def revenue_optimization(request):
 
         # Create a line chart for each product
         fig, ax = plt.subplots()
-        ax.plot(demand, price)
-        ax.set_xlabel('Demand')
-        ax.set_ylabel('Price')
+        ax.plot(price, demand)
+        ax.set_xlabel('Price')
+        ax.set_ylabel('Demand')
         ax.set_title(f'{product.name} Revenue Optimization')
         
         # Save the chart to a buffer
