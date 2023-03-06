@@ -167,13 +167,11 @@ def revenue_optimization(request):
             "revenue": [(r, p, d) for r, p, d in zip(revenue, price, demand)]
         }
 
-        # Create a bar chart for each product
+        # Create a line chart for each product
         fig, ax = plt.subplots()
-        ax.bar(range(len(price)), revenue)
-        ax.set_xticks(range(len(price)))
-        ax.set_xticklabels(price)
-        ax.set_xlabel('Price')
-        ax.set_ylabel('Revenue')
+        ax.plot(demand, price)
+        ax.set_xlabel('Demand')
+        ax.set_ylabel('Price')
         ax.set_title(f'{product.name} Revenue Optimization')
         
         # Save the chart to a buffer
@@ -194,3 +192,4 @@ def revenue_optimization(request):
     }
 
     return render(request, "rm/optimizer/revenue-optimization.html", context=context)
+
