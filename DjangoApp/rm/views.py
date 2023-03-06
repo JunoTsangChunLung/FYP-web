@@ -122,6 +122,7 @@ def add_cat(request):
     for key in category_dict:
         category = Category(name=key)
         cat.append(category)
+        category.save() # save the category object before creating subcategories
         for sub_key in category_dict[key]:
             if sub_key is None or sub_key == "":
                 continue
@@ -134,6 +135,7 @@ def add_cat(request):
     Subcategory.objects.bulk_create(subcat)
 
     return redirect('home')
+
 
 def revenue_optimization(request):
     user_product = {}
