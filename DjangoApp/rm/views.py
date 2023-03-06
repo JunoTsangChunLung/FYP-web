@@ -134,8 +134,8 @@ def add_cat(request):
                 subcategory = Subcategory(category=category, name=sub_key)
             subcategory.save()
 
-    Category.objects.all().delete()
-    Subcategory.objects.all().delete()
+    # Category.objects.all().delete()
+    # Subcategory.objects.all().delete()
 
     return redirect('home')
 
