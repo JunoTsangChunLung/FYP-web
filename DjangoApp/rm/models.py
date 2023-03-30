@@ -71,6 +71,6 @@ class Category_feature(models.Model):
         verbose_name_plural = "category_features"
 
 class Price_for_graph(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="prices")
-    price = models.CharField()
-    demand = models.CharField()
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="prices_graph")
+    price = models.CharField(max_length=250000)
+    demand = models.CharField(max_length=250000)
