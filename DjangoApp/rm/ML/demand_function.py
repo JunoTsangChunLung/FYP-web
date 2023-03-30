@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np
 from tensorflow.keras.models import load_model
 
-model = load_model('demand_prediction.h5')
+model = load_model('rm/ML/demand_prediction.h5')
 
 def demand_pred(quantity, inventory, max_price, min_price, category):
     category_dict = {'Electrical Appliances': 0, 'Gadgets & Electronics': 1, 'Housewares': 2, 'Mother & Baby': 3, 'Personal Care & Health': 4, 'Pets': 5, 'Skincare & Makeup': 6, 'Sports & Travel': 7, 'Supermarket': 8, 'Toys & Books': 9}
