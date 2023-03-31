@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Product, Category, Subcategory
+from .models import Product, Category, Subcategory, Prouduct_Price
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -13,4 +13,8 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Subcategory)
 class SubcategoryAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Prouduct_Price)
+class Prouduct_PriceAdmin(admin.ModelAdmin):
     pass
