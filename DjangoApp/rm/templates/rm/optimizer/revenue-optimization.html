@@ -40,14 +40,9 @@
                       Product Revenue: HKD $ {{value.partial_revenue}}
                   </h6>
                   <div class="card-header">
-                    Product demand price curve
+                    Product Graph
                   </div>
-                  <img class="card-img" src="data:image/png;base64,{{value.image}}" />
-                  {% comment %} <ul class="list-group list-group-flush">
-                  {% for r in value.revenue %}
-                    <li class="list-group-item"> ${{ r.0 }} (${{ r.1 }}|{{ r.2 }})</li>
-                  {% endfor %}                  
-                  </ul> {% endcomment %}
+                  <img class="card-img" src="{% static 'images/products/' %}{{ key }}.jpg" />
                   <div class="d-flex justify-content-between align-items-center">
                     <h5> </h5>
                   </div>

@@ -2,12 +2,13 @@ from django.shortcuts import render, redirect
 from .forms import ProductForm, CategoryForm
 from .revenue_optimizer import optimizer 
 from .category import make_cat
-from .models import Category, Subcategory, Product, Prouduct_Price, Price_for_graph
+from .models import Category, Subcategory, Product, Prouduct_Price
 from django.http import JsonResponse, HttpResponse
 
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import io
-import urllib, base64
+import os
 
 #Production
 from .ML.demand_function import demand_pred
@@ -88,15 +89,21 @@ def create_product(request):
             prices_list, demands_list, optimal_prices, optimal_demands, optimal_revenue = demand_pred(quantity_produced, inventory,max_price, min_price , category)
             # optimal_revenue, optimal_prices, optimal_demands = optimizer(prices, demand,quantity_produced, inventory, min_price, max_price)
 
+            plt.scatter(prices_list, demands_list, color = "blue")
+            plt.plot(prices_list, demands_list, color = "red")
+            plt.xlabel('price')
+            plt.ylabel('demand')
+            
+            static_path = os.path.join(os.path.dirname(__file__), '../static/images/products')
+            filename = os.path.join(static_path, f"{product.name}.jpg")
+
+            plt.savefig(filename)
+
             bulk_create = []
             for prices, demands in zip(optimal_prices, optimal_demands):
                 revenue = prices * demands
                 bulk_create.append(Prouduct_Price(product = product, price = prices, demand= demands, revenue = revenue))
             Prouduct_Price.objects.bulk_create(bulk_create)
-
-            prices_list = f"{prices_list}"
-            demands_list = f"{demands_list}"
-            Price_for_graph.objects.create(product = product, price = prices_list, demand= demands_list, revenue = revenue)
 
             product.total_price = optimal_revenue
             product.save()
@@ -162,7 +169,6 @@ def revenue_optimization(request):
     for product in products:
         product_prices = Prouduct_Price.objects.filter(product=product)
         total_revenue += product.total_price
-
         price = []
         demand = []
         revenue = []
@@ -178,34 +184,9 @@ def revenue_optimization(request):
             "revenue": [(r, p, d) for r, p, d in zip(revenue, price, demand)]
         }
 
-        #The graph part
-        price_graph = Price_for_graph.objects.get(product = product)
-        price_list = ast.literal_eval(price_graph.price)
-        demand_list = ast.literal_eval(price_graph.demand)
-
-        # Create a line chart for each product
-        fig, ax = plt.subplots()
-        ax.plot(price_list, demand_list)
-        ax.set_xlabel('Price')
-        ax.set_ylabel('Demand')
-        ax.set_title(f'{product.name} Revenue Optimization')
-        
-        # Save the chart to a buffer
-        buffer = io.BytesIO()
-        plt.savefig(buffer, format='png')
-        buffer.seek(0)
-        image_base64 = base64.b64encode(buffer.read()).decode('utf-8').replace('\n', '')
-        buffer.close()
-
-        # Add the image to the dictionary
-        user_product[product.name]['image'] = image_base64
-
-        plt.close()
-
     context = {
         "total_revenue": total_revenue,
         "user_product": user_product
     }
 
     return render(request, "rm/optimizer/revenue-optimization.html", context=context)
-
