@@ -15,7 +15,7 @@ def demand_pred(quantity, inventory, max_price, min_price, category):
     demands = []
     for price in prices:
         prediction = model.predict(np.array([[price, *ll[0]]]))
-        demands.append(prediction[0][0])
+        demands.append(prediction[0][0]/10000)
 
     price_demand_pairs = list(zip(prices, demands))
     sorted_price_demand_pairs = sorted(price_demand_pairs, key=lambda x: x[0], reverse=True)
