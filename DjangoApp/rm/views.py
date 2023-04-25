@@ -89,7 +89,7 @@ def create_product(request):
             prices_list, demands_list, optimal_prices, optimal_demands, optimal_revenue = demand_pred(quantity_produced, inventory,max_price, min_price , category)
             # optimal_revenue, optimal_prices, optimal_demands = optimizer(prices, demand,quantity_produced, inventory, min_price, max_price)
 
-            plt.scatter(prices_list, demands_list, color = "blue")
+            plt.scatter(optimal_prices, optimal_demands, color = "blue")
             plt.plot(prices_list, demands_list, color = "red")
             plt.xlabel('price')
             plt.ylabel('demand')
