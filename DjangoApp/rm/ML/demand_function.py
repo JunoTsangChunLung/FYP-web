@@ -1,22 +1,33 @@
+#Import libraries
 import tensorflow as tf
 import numpy as np
 from tensorflow.keras.models import load_model
 
+#input deep leraning model
 model = load_model('rm/ML/demand_prediction.h5')
 
+#Function for later use
 def demand_pred(quantity, inventory, max_price, min_price, category):
+    #import category list from HKTV Mall documentation
     category_dict = {'Electrical Appliances': 0, 'Gadgets & Electronics': 1, 'Housewares': 2, 'Mother & Baby': 3, 'Personal Care & Health': 4, 'Pets': 5, 'Skincare & Makeup': 6, 'Sports & Travel': 7, 'Supermarket': 8, 'Toys & Books': 9}
     category = category.name
+
+    #Initialize variables
     ll = np.zeros((10,), dtype = int)
     prices = np.arange(int(min_price), int(max_price), 0.1)
+
+    #if category in list, encode it for the model to use
     if category in list(category_dict.keys()):
         ll[category_dict[category]] = 1
     ll = np.array(ll).reshape(1, -1)
     demands = []
+
+    # for each price, predict the demand
     for price in prices:
         prediction = model.predict(np.array([[price, *ll[0]]]))
         demands.append(prediction[0][0])
 
+    #process the output
     price_demand_pairs = list(zip(prices, demands))
     sorted_price_demand_pairs = sorted(price_demand_pairs, key=lambda x: x[0], reverse=True)
     idx = 0
@@ -45,4 +56,5 @@ def demand_pred(quantity, inventory, max_price, min_price, category):
 
     prices = prices.tolist()
 
+    #return output
     return prices, demands, optimal_prices, optimal_demands, optimal_revenue
