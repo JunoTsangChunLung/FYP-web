@@ -1,52 +1,32 @@
+{% include "base.html" %} {% load static %} {% load crispy_forms_tags %} {%
+block content %}
 
-{% include "base.html" %}
+<style>
+  body {
+    background-color: gray;
+  }
+</style>
 
-{% load static %}
+<body>
+  <br />
 
-{% load crispy_forms_tags %}
+  <div class="container bg-white shadow-md p-5 form-layout">
+    <h3>Update to your account</h3>
 
-{% block content %}
+    <form method="POST" autocomplete="OFF">
+      {% csrf_token %} {{user_form.username|as_crispy_field}}
 
-    <style>
+      <br /><br />
+      <button
+        type="submit"
+        class="btn btn-secondary btn-lg w-100 btn-block p-2"
+      >
+        &nbsp; Login
+      </button>
+    </form>
+  </div>
+</body>
 
-
-
-        body{
-
-            background-color: gray;
-
-        }
-
-
-
-
-    </style>
-
-
-    <body>
-        <br>
-
-
-        <div class="container bg-white shadow-md p-5 form-layout">
-
-            <h3>Update to your account</h3>
-
-            <form method="POST" autocomplete="OFF">
-
-                {% csrf_token %}
-
-                {{user_form.username|as_crispy_field}}
-
-                <br><br>
-                <button type="submit" class="btn btn-secondary btn-lg w-100 btn-block p-2">&nbsp; Login </button>
-
-            </form>
-        </div>
-
-    </body>
-
-    <br><br>
-
-
+<br /><br />
 
 {% endblock %}
