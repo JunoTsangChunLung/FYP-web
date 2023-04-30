@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from .forms import ProductForm, CategoryForm
-from .revenue_optimizer import optimizer 
 from .category import make_cat
 from .models import Category, Subcategory, Product, Prouduct_Price
 from django.http import JsonResponse, HttpResponse
@@ -13,18 +12,15 @@ import os
 #Production
 from .ML.demand_function import demand_pred
 
-#Graph
-import ast
-
-#testing
-import random
-
 # Create your views here.
 def get_subcategories(request):
+
+    #getting the data in database
     category_id = request.GET.get('category_id')
     subcategories = Subcategory.objects.filter(category_id=category_id)
     data = [{'id': subcategory.id, 'name': subcategory.name} for subcategory in subcategories]
 
+    #returning the response in json format, which is similar to dictionary format in python.
     return JsonResponse(data, safe=False)
 
 def create_product(request):
@@ -41,26 +37,6 @@ def create_product(request):
         if form.is_valid():
             # Get input data from the form
 
-            """
-            Demand and prices get from Pang's application
-            Request: category, subcategory, sales_period
-            Response: {
-                wtp[i]:int
-                demand[i]:int
-            }
-
-            product_revenue = wtp[i]*demand[i] for i in range(len(wtp))
-            prices = [i]
-
-            """ 
-
-            num_of_i = random.randint(1, 10)
-            demand = []
-            prices = []
-            for i in range(num_of_i):
-                demand.append(random.randint(1,10))
-                prices.append(random.randint(20, 3000))
-
             name = form.cleaned_data['name']
             quantity_produced = form.cleaned_data["quantity_produced"]
             sales_period = form.cleaned_data["period"]
@@ -73,7 +49,7 @@ def create_product(request):
             subcategory = Subcategory.objects.get(id=subcategory_id)
             user = request.user
 
-
+            #Initialize the query to create data instance
             product = Product(name = name, quantity_produced = quantity_produced, period = sales_period, inventory= inventory, min_price=min_price, max_price = max_price, category = category, subcategory = subcategory, user=user, total_price=0)
 
             product.save()
@@ -87,8 +63,9 @@ def create_product(request):
             optimized_revenue: number[]
             """
             prices_list, demands_list, optimal_prices, optimal_demands, optimal_revenue = demand_pred(quantity_produced, inventory,max_price, min_price , category)
-            # optimal_revenue, optimal_prices, optimal_demands = optimizer(prices, demand,quantity_produced, inventory, min_price, max_price)
 
+
+            #for plotting the graph
             plt.scatter(optimal_prices, optimal_demands, color = "blue")
             plt.plot(prices_list, demands_list, color = "red")
             plt.xlabel('price')
@@ -137,6 +114,7 @@ def create_product(request):
     })
 
 def add_cat(request):
+    #getting the category dictionary form the copy of HKTV Mall OpenData Bank
     category_dict = make_cat()
     for key in category_dict:
         # Check if the category already exists

@@ -9,9 +9,10 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def register(request):
-    
+    #Create the form by initializing the form
     form = createUserForm()
 
+    #Create data if the form in in POST Method, else output the form
     if request.method == "POST":
 
         form = createUserForm(request.POST)
@@ -26,9 +27,10 @@ def register(request):
     return render(request, 'account/registration/register.html', context = context)
 
 def my_login(request):
-    
+    #Create the form by initializing the form
     form = LoginForm()
-
+    
+    #Create data if the form in in POST Method, else output the form
     if request.method == "POST":
 
         form = LoginForm(request, data=request.POST)
