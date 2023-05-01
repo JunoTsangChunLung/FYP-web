@@ -159,6 +159,7 @@ def revenue_optimization(request):
 
         user_product[product.name] = {
             "partial_revenue": partial_revenue,
+            "period":product.period,
             "revenue": [(r, p, d) for r, p, d in zip(revenue, price, demand)]
         }
 
